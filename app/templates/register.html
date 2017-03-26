@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+
+{% block content %}
+
+
+
+  <div class="page-header">
+     <h2 align="center">Форма за регистрација</h2>
+  </div>
+
+
+<div class="row" style="margin-top: 10px;">
+        <div class="col-xs-12 col-md-3 col-sm-4 col-sm-offset-4 col-md-offset-4 col-lg-4 col-lg-offset-4" style="border: 1px solid gray; border-radius:10px; padding:20px; margin-bottom: 50px;">
+
+            {% call macros.render_form(form, action_url=url_for('register'), action_text='Регистрирај се', class_='register-form') %}
+                {{ macros.render_field(form.fullName, placeholder='пр. Аце ацев', type='text') }}
+                {{ macros.render_field(form.email, placeholder='пр. john@doe.com', type='email') }}
+                {{ macros.render_field(form.password, placeholder='пр. МојаЛозинка123', type='password') }}
+                {{ macros.render_field(form.repeatPassword, placeholder='пр. МојаЛозинка123', type='password') }}
+                {{ macros.render_field(form.telNumber, placeholder='пр. 078/123-456', type='text') }}
+                {{ macros.render_checkbox_field(form.acceptTOS) }}
+
+            {% endcall %}
+        </div>
+    </div>
+
+    <script type="text/javascript" >
+        $('#acceptTOS').prop('checked', false)
+        $('.btn').prop('disabled', true)
+        $('.checkbox').click(function (e) {
+           if($(e.target).is(':checked'))
+           { $('.btn').prop('disabled', false); }
+           else
+           { $('.btn').prop('disabled', true); }
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="/static/img/icons/icon.png">
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }} - НајдиСтан.мк</title>
+    {% else %}
+    <title>- Добредојдовте на НајдиСтан.мк -</title>
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../../../static/css/lightbox.min.css">
+    <script src="/static/js/moment.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.3/css/bootstrap-slider.min.css">
+
+    <script type="text/javascript" >
+        $(document).ready(function(){
+
+            setTimeout(function() {
+            $('.flash').fadeOut('slow');
+            }, 5000);
+
+            $('#repl').hide();
+
+            $('#city').on('change', function() {
+              if(this.value != 'Скопје'){
+                  $('#area').prop('disabled', true)
+              }else{
+                  $('#area').prop('disabled', false)
+              }
+            });
+
+            $('#types').on('change', function() {
+              if(this.value == 1){
+                 $('#prim').hide();
+                 $('#repl').show();
+                 $('#price').val($('#ex1-replace').val())
+              }else{
+                 $('#prim').show();
+                 $('#repl').hide();
+                 $('#price').val($('#ex1').val())
+              }
+            });
+
+
+            $('.slider').slider({});
+            $("#ex1").on("slide", function(slideEvt) {$("#price").val(slideEvt.value); });
+            $("#ex1-replace").on("slide", function(slideEvt) {$("#price").val(slideEvt.value); });
+            $("#ex2").on("slide", function(slideEvt) {$("#quadrature").val(slideEvt.value); });
+            $("#ex3").on("slide", function(slideEvt) {$("#floor").val(slideEvt.value); });
+            $("#ex4").on("slide", function(slideEvt) {$("#rooms").val(slideEvt.value); });
+
+
+        });
+    </script>
+
+
+    <style>
+        body{ background-image: url("../../../static/img/icons/bg.jpg"); }
+        th{text-align: center;}
+        td{vertical-align: middle !important;}
+        .table-bordered{border: 2px solid #000 !important;}
+        .listingIndex:hover{background: #D3D3D3;}
+    </style>
+  </head>
+  <body>
+   <div class="container" >
+
+     <nav class="navbar navbar-inverse ">
+      <div class="container-fluid">
+        <div class="navbar-header">
+
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>            <span class="icon-bar"></span>            <span class="icon-bar"></span>
+          </button>
+
+            <a class="navbar-brand" href="/">
+             <img alt="НајдиСтан.мк" src="/static/img/icons/icon.png" width="25px" height="25px">
+            </a>
+          <a class="navbar-brand">НајдиСтан.мк</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav nav-tabs">
+            <li class="active"><a href="/">Почетна</a></li>
+            <li style="width: 170px;">&nbsp;</li>
+            <li><a href="/about">За сајтот</a></li>
+            <li><a href="/contact">Контакт</a></li>
+            <li><a href="/terms">Услови</a></li>
+
+          </ul>
+
+      {% if g.user.is_authenticated %}
+            <ul class="nav navbar-nav navbar-right nav-tabs">
+             <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;<b>С М Е Т К А</b>
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% if g.user.is_admin %}
+                        <li><a href="/adminpanel"><span class="glyphicon glyphicon-globe"></span>&nbsp;&nbsp;&nbsp;АДМИН ПАНЕЛ</a></li>
+                    {% endif %}
+                  <li><a href="/profile"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;&nbsp;П Р О Ф И Л</a></li>
+                  <li><a href="/profile/edit"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;&nbsp;П О С Т А В К И</a></li>
+                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;&nbsp;О Д Ј А В А</a></li>
+             </ul>
+            </ul>
+        {% else %}
+            <ul class="nav navbar-nav navbar-right">
+             <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;&nbsp;<b>С М Е Т К А</b>
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;&nbsp;Н А Ј А В А</a></li>
+                  <li><a href="/register"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;&nbsp;Р Е Г И С Т Р А Ц И Ј А</a></li>
+             </ul>
+            </ul>
+        {% endif %}
+
+        <ul class="nav navbar-nav navbar-right nav-tabs">
+             <li><a href="/listing/new"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Додај нов оглас!&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"></span></a></li>
+        </ul>
+
+
+
+        </div>
+      </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for mes in messages %}
+                <div class="alert alert-info flash" id="flash">
+                    <button type="button" class="close" data-dismiss="alert" style="padding: 5px">&times;</button>
+                    {{ mes }}
+                </div>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+
+
+
+    {% block content %}{% endblock %}
+
+
+    </div> <!-- CONTAINTER DIV -->
+
+    <script>
+        $('#myNavbar li.active').removeClass('active');
+        $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
+    </script>
+    <script src="../../../static/js/lightbox-plus-jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.3/bootstrap-slider.min.js"></script>
+   </body>
+</html>

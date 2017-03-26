@@ -1,0 +1,19 @@
+
+
+
+
+    <div class="panel panel-info" id="{{com.commendId}}">
+
+      <div class="panel-heading"><a href="/user/{{com.commentOwner.userId}}">{{com.commentOwner.fullName}}</a>
+          {% if com.user_id == g.user.userId or g.user.is_admin %}
+           <a id="deleteCom" comID="{{com.commendId}}" class="label label-danger comDelete" style="float: right; margin: 0px 10px; cursor: pointer;" data-toggle="tooltip" title="Бриши коментар"> X </a> &nbsp;&nbsp;&nbsp;
+          {% else %}
+           <span comID="{{com.commendId}}" userId="{{com.commentOwner.userId}}" cid="{{ccid.condoId}}" class="glyphicon glyphicon-flag comReport" style="float: right; margin: 0px 10px; cursor: pointer;" data-toggle="modal" data-target="#myModal"></span>
+          {% endif %}
+
+          <span class="badge" style="display: block; float: right; ">{{momentjs(com.commTimeStamp).fromNow()}}</span>
+      </div>
+
+      <div class="panel-body" style="white-space: pre-line;">{{com.body|safe}}</div>
+
+    </div>

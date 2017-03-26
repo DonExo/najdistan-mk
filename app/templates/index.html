@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% import 'macros.html' as macros %}
+{% block content %}
+
+
+    <div class="row">
+
+        <div class="row" style="margin-bottom: 30px;">
+
+             <div class="jumbotron" style=" padding: 1px !important; background-color: #E8EFF0; border-radius: 5px">
+                <h1 class="text-center"><small>Добре дојдовте на </small>НајдиСтан.мк</h1>
+              </div>
+
+             <form action="/search" method="GET" autocomplete="off">
+
+                <div class="col-md-3 col-lg-3" style="text-align: center; " >
+                    <b>Град</b>
+                    {{macros.render_field(forms.city, label_visible=false)}}
+                </div>
+                <div class="col-md-3 col-lg-3" style="text-align: center; " >
+                    <b>Населба</b>
+                    <td>{{macros.render_field(forms.area, label_visible=false)}}</td>
+                </div>
+                <div class="col-md-3 col-lg-3" style="text-align: center; " >
+                     <b>Тип</b>
+                     <td>{{macros.render_field(forms.types, label_visible=false)}}</td>
+                </div>
+                <div class="col-md-3 col-lg-3" style="text-align: center; " >
+                    <b>Клучен збор</b>
+                    {{macros.render_field(forms.keyword, label_visible=false,  placeholder='Пример: Водно, 55м, клима')}}
+                </div>
+
+
+                <div id="prim" class="col-md-3 col-lg-3" style="margin-top: 15px" >
+                   <b>20.000€</b> <b style="float: right">250.000€</b>  <input id="ex1" type="text" class="slider" value="" data-slider-min="20000" data-slider-max="250000" data-slider-step="10000" data-slider-value="[30000,200000]"/>
+                   <p style="text-align: center"><b>Цена</b></p>
+                </div>
+                <div id="repl" class="col-md-3 col-lg-3" style="margin-top: 15px" >
+                   <b>1€</b> <b style="float: right">999€</b>  <input id="ex1-replace" type="text" class="slider" value="" data-slider-min="100" data-slider-max="999" data-slider-step="50" data-slider-value="[120,500]"/>
+                   <p style="text-align: center"><b>Цена</b></p>
+                </div>
+
+                <div class="col-md-3 col-lg-3 " style="margin-top: 30px" >
+                   <b>20</b><b style="float: right">200</b> <input id="ex2" type="text" class="slider" value="" data-slider-min="20" data-slider-max="200" data-slider-step="5" data-slider-value="[55,155]"/>
+                    <p style="text-align: center"><b>Квадратура</b></p>
+                 </div>
+
+                <div class="col-md-3 col-lg-3" style="margin-top: 30px" >
+                   <b>0</b><b style="float: right">15</b> <input width="200px" id="ex3" type="text" class="slider" value="" data-slider-min="0" data-slider-max="15" data-slider-step="1" data-slider-value="[1,12]"/>
+                    <p style="text-align: center"><b>Кат</b></p>
+                </div>
+
+                <div class="col-md-3 col-lg-3" style="margin-top: 30px" >
+                    <b>1</b><b style="float: right">8</b> <input width="75%" id="ex4" type="text" class="slider" value="" data-slider-min="1" data-slider-max="8" data-slider-step="1" data-slider-value="[2,7]"/>
+                     <p style="text-align: center"><b>Број на соби</b></p>
+                </div>
+
+                <div class="col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2" >
+                    {{macros.render_field_sub(forms.submit, label_visible=false, class='btn btn-lg btn-block btn-primary')}}
+                </div>
+
+                    <input type="hidden" name="price" id="price" value="30000,200000">
+                    <input type="hidden" name="quadrature" id="quadrature" value="55,155">
+                    <input type="hidden" name="floor" id="floor" value="1,12">
+                    <input type="hidden" name="rooms" id="rooms" value="2,7">
+
+              </form>
+
+        </div>
+
+
+        <div id="searchCriteria" style="height: 40px; width: 95%; margin: 20px 40px ">
+            <ol class="breadcrumb">
+                {% if critList %}
+                <li><b>{{critList[0]}}</b></li>
+
+                {% if critList[1] == 'сите' %}
+                <li><b>Сите населби</b></li>
+                {% else %}
+                <li><b>{{critList[1]}}</b></li>
+                {% endif %}
+
+                {% if critList[2] == '0' %}
+                <li><b>Се продава</b></li>
+                {% else %}
+                <li><b>Се издава</b></li>
+                {% endif %}
+
+                <li><b>Цена:</b> {{critList[3].split(',')[0]}} - {{critList[3].split(',')[1]}} €</li>
+                <li><b>Квадратура:</b> {{critList[4].split(',')[0]}} - {{critList[4].split(',')[1]}}</li>
+                <li><b>Кат:</b> {{critList[5].split(',')[0]}} - {{critList[5].split(',')[1]}}</li>
+                <li><b>Соби:</b> {{critList[6].split(',')[0]}} - {{critList[6].split(',')[1]}}</li>
+                <li><b>Клучен збор:</b> <i>"{{critList[7]}}"</i></li>
+                {% endif %}
+            </ol>
+        </div>
+
+
+        <!-- Glavnio div so site stanovi -->
+        <div class="col-md-9 col-lg-9" style=" margin-bottom: 30px; ">
+            {% if indexCondos %}
+                {% for condo in indexCondos %}
+                    {% include 'listingIndex.html' %}
+                {% endfor %}
+            {% else %}
+                <h4>Нема станови кои ги исполнуваат вашите критериуми :(</h4>
+            {% endif %}
+
+        </div>
+
+
+        <!-- desnata kolona so 'random' generirani stanovi -->
+        <div class="col-md-3 col-lg-3" style="border: 1px solid black; border-radius: 10px; margin-bottom: 30px;background: #E0E0E0; ">
+
+            <!-- prvio, random generated -->
+            <div class="col-md-12 col-lg-12" style=" min-height: 200px; border-bottom: 1px dashed black; margin-top: 20px; padding: 20px;">
+                <p class="text-center"><ins>По случаен избор:</ins></p>
+                <h4><a href="{{url_for('listingPreview', cid=randomCondo.condoId)}}"><abbr title="{{randomCondo.description}}">{{randomCondo.title}}</abbr></a></h4>
+                <h5><b>Град:</b> {{randomCondo.city}} <br> <b>Цена:</b> {{randomCondo.price}}<span class="glyphicon glyphicon-eur"></span> <br> <b>Тип:</b>{% if randomCondo.types %} Се изнајмува {% else %} Се продава {% endif %}</h5>
+                 {% if randomCondo.imgsPerCondo[0] %}
+                <a class="thumbnail" href="{{randomCondo.imgsPerCondo[0].path[3:]}}" data-lightbox="1" >
+                <img class="img-thumbnail" src="{{randomCondo.imgsPerCondo[0].path[3:]}}"  alt="Не постои слика..." style="max-height: 200px;" /></a>
+                 {% else %}
+                 <a href="#" >
+                <img class="img-thumbnail" src=""  alt="Не постои слика..." /></a>
+                {% endif %}
+            </div>
+
+            <!-- vtorio, posledno objaven -->
+            <div class="col-md-12 col-lg-12" style=" min-height: 200px; border-bottom: 1px dashed black;  margin-top: 20px;">
+                <p class="text-center"><ins>Последно објавен:</ins></p>
+                <h4><a href="{{url_for('listingPreview', cid=lastCondo.condoId)}}"><abbr title="{{lastCondo.description}}">{{lastCondo.title}}</abbr></a></h4>
+                <h5><b>Град:</b> {{lastCondo.city}} <br> <b>Цена:</b> {{lastCondo.price}} <span class="glyphicon glyphicon-eur"></span> <br> <b>Тип:</b>{% if lastCondo.types %} Се изнајмува {% else %} Се продава {% endif %}</h5>
+                {% if lastCondo.imgsPerCondo[0] %}
+                <a class="thumbnail" href="{{lastCondo.imgsPerCondo[0].path[3:]}}"  data-lightbox="2" >
+                <img class="img-thumbnail" src="{{lastCondo.imgsPerCondo[0].path[3:]}}"  alt="Не постои слика..." style="max-height: 200px;"  /></a>
+                {% else %}
+                <a href="#" >
+                <img class="img-thumbnail" src=""  alt="alt text" /></a>
+                {% endif %}
+            </div>
+
+            <!-- tretio, najcesto posetuvan-->
+            <div class="col-md-12 col-lg-12" style=" min-height: 200px;  margin-top: 20px;">
+                <p class="text-center"><ins>Најчесто посетуван:</ins></p>
+                <h4><a href="{{url_for('listingPreview', cid=mostVisited.condoId)}}"><abbr title="{{mostVisited.description}}">{{mostVisited.title}}</abbr></a></h4>
+                <h5><b>Град:</b> {{mostVisited.city}} <br> <b>Цена:</b> {{mostVisited.price}} <span class="glyphicon glyphicon-eur"></span> <br> <b>Тип:</b>{% if mostVisited.types %} Се изнајмува {% else %} Се продава {% endif %}</h5>
+                {% if mostVisited.imgsPerCondo[0] %}
+                <a class="thumbnail" href="{{mostVisited.imgsPerCondo[0].path[3:]}}"  data-lightbox="3"  >
+                <img class="img-thumbnail" src="{{mostVisited.imgsPerCondo[0].path[3:]}}" alt="Не постои слика..." style="max-height: 200px;" /></a>
+                {% else %}
+                <a href="#" >
+                <img class="img-thumbnail" src=""  alt="Не постои слика..." /></a>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+   
+{% endblock %}

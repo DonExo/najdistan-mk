@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+{% block content %}
+
+     <div class="row">
+
+
+        <div class="col-md-8 col-md-offset-0 col-lg-8 col-lg-offset-0"> <!-- prvio div so col 8 od 12 -->
+
+            <!-- div za img i imeto -->
+            <div class="col-md-6 col-lg-6" style="margin-bottom: 30px; padding-left: 80px;">
+                <h2><span class="label label-default text-center">{{user.fullName}}</span></h2>
+                <img src="{{ user.avatar(128) }}" class="img-circle" style="margin-left: 40px; margin-top: 10px;">
+            </div>
+
+            <!-- div za info na sredina -->
+            <div class="col-md-5 col-lg-5 " >
+                <h3 align="center">Вкупно огласени станови: <span class="label label-warning">{{condos|count}}</span></h3>
+                <span class="help-block text-center">&nbsp;Од кои <span class="label label-warning">{{freeCondos}}</span> се слободни </span>
+                <br>
+                 {% if bol %}
+                     <a href="/listing/new" class="btn btn-success btn-lg btn-block active" role="button">
+                     <span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Додај нов оглас!&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"></span></a>
+                {% endif %}
+                 <br>
+                <h4 align="center">Последна активност: <span class="badge">{{momentjs(user.lastSeen).calendar()}}</span></h4>
+                <br> <br>
+            </div>
+
+            <!-- div za listanje stanovi -->
+            <div class="col-md-12 col-md-offset-0 col-lg-12 col-lg-offset-0" style="margin-bottom: 50px;">
+                 <div class="table-responsive">
+                 <table class="table table-striped table-hover table-bordered table-condensed"  >
+                     {% if condos %}
+                    <thead>
+                      <tr class="info" >
+                        <th>Наслов</th>
+                        <th style="min-width: 80px;">Цена</th>
+                        <th>Акција</th>
+                    {%if bol%}
+                        <th>Измени</th>
+                        <th>Бриши</th>
+                         <th>Статус</th>
+                    {%endif%}
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for condo in condos %}
+                        <div class="btn-group btn-group-justified">
+                        <tr>
+                            <td>{{condo.title}}</td>
+                            <td>{{condo.price}}<b> €</b></td>
+                            <td>
+                                <a href="/listing/preview/{{condo.condoId}}" class="btn btn-primary btn-info btn-small btn-block" target="_blank">
+                                    <span class="glyphicon glyphicon-link"></span>&nbsp;Линк
+                                </a>
+                            </td>
+                             {%if bol%}
+                                <td>
+                                <a href="/listing/edit/{{condo.condoId}}" class="btn btn-primary btn-info btn-small btn-block" target="_blank">
+                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;Измени
+                                </a>
+                                </td>
+                                <td>
+                                <a href="/listing/delete/{{condo.condoId}}" class="btn btn-primary btn-info btn-small btn-block"  >
+                                    <span class="glyphicon glyphicon-trash"></span>&nbsp;Избриши
+                                </a>
+                                </td>
+                                <td>
+                                   {% if condo.available %}
+                                    <a  class="btn btn-success btn-small btn-block klikPromena" name="{{condo.condoId}}" id="{{condo.condoId}}">
+                                        <span class="glyphicon glyphicon-star"></span>&nbsp;<abbr title="Клик за промена">Слободен</abbr>
+                                   {% else %}
+                                   <a  class="btn btn-danger btn-small btn-block klikPromena" name="{{condo.condoId}}" id="{{condo.condoId}}">
+                                        <span class="glyphicon glyphicon-star-empty"></span>&nbsp;<abbr title="Клик за промена">Зафатен</abbr>
+                                   {% endif %}
+                                </a>
+                                </td>
+                             {%endif%}
+                             </div>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% else %}
+                     {% if bol %}
+                        <p class="text-center">Немате објавено станови. Кликнете „<b><a href="/listing/new">Додај нов оглас!“ за да креирате</a></b>.</p>
+                     {% else %}
+                        <p class="text-center">Корисникот нема објавено станови.</p>
+                     {% endif %}
+                {% endif %}
+
+                 </table>
+                </div>
+
+         </div>  <!-- end DIV za listanje stanovi -->
+
+
+         </div> <!-- end DIV od prvio so 8 koloni -->
+
+
+
+         <div class="col-md-4 col-md-offset-0 col-lg-4 col-lg-offset-0" >
+         {% if bol %}
+             <!-- prvio div - so preferencite -->
+             <div class="col-md-12 col-lg-12" style="min-height: 300px; border: 1px solid gray;">
+                  <p class="text-center">Лични преференци:</p>
+                 <div class="checkbox-inline" style="text-align: center; margin-bottom: 20px;">
+                     {% if user.interestedIn.split('-')[0] == '1' %}
+                        <input type="checkbox" id="cbx" value="" checked ><label id="lbl" class="text-center">Активирано</label>
+                     {% else %}
+                        <input type="checkbox" id="cbx" value="" ><label id="lbl" class="text-center">Активирај</label>
+                     {% endif %}
+
+                 </div>
+                 <span id="spn" class="help-block">Доколку ја активирате оваа опција - ќе добиете е-маил известување доколку некој нов оглас ги исполнува вашите критериуми.</span>
+                <br>
+                 <div id="personalPref" style="display: none;">
+                     {% call macros.render_form_other(form, action_url=url_for('profile'), action_text='',  class_='form-horizontal') %}
+                        {{ macros.render_field_inline_price_oddo(form.price, value=user.interestedIn.split('-')[4]) }}
+                        {{ macros.render_field_inline(form.condoType, value=user.interestedIn.split('-')[3]) }}
+                        {{ macros.render_field_inline(form.city, value=user.interestedIn.split('-')[1]) }}
+                        {{ macros.render_field_inline(form.areas, value=user.interestedIn.split('-')[2]) }}
+                        <input type="hidden" name="userid" id="userid" value="{{user.userId}}">
+                        <input type="hidden" name="dooVal" id="dooVal" value="{{user.interestedIn.split('-')[5]}}">
+                    {% endcall %}
+                        <div class="form-group">
+                             <button type="button" id="savePref" class="btn btn-primary btn-block" >Зачувај</button>
+                        </div>
+
+                 </div>
+
+             </div>
+          </div>
+         {% else %}
+                <div class="col-md-12 col-lg-12" style="min-height: 300px; border: 1px solid gray;">
+                  <p class="text-center">Лични преференци:</p>
+                 <div class="checkbox-inline" style="text-align: center; margin-bottom: 20px;">
+                     {% if user.interestedIn.split('-')[0] == '1' %}
+                        <input type="checkbox" id="cbx" value="" checked disabled ><label id="lbl" class="text-center">Активирано</label>
+                     {% else %}
+                        <input type="checkbox" id="cbx" value="" disabled ><label id="lbl" class="text-center">Активирај</label>
+                     {% endif %}
+
+                 </div>
+                 <span id="spn" class="help-block">Доколку ја активирате оваа опција - ќе добиете е-маил известување доколку некој нов оглас ги исполнува вашите критериуми.</span>
+                <br>
+                 <div id="personalPref" style="display: none;">
+                     <table style="width: 99%">
+                         <tr>
+                             <th>Од</th>
+                             <td>{{user.interestedIn.split('-')[4]}}</td>
+                         </tr>
+                         <tr>
+                             <th>До</th>
+                             <td>{{user.interestedIn.split('-')[5]}}</td>
+                         </tr>
+                          <tr>
+                             <th>Тип</th>
+                              {% if user.interestedIn.split('-')[3] == '0' %}
+                             <td>За продавање</td>
+                              {% else %}
+                              <td>За издавање</td>
+                              {% endif %}
+                         </tr>
+                          <tr>
+                             <th>Град</th>
+                             <td>{{user.interestedIn.split('-')[1]}}</td>
+                         </tr>
+                          <tr>
+                             <th>Населба</th>
+                             <td>{{user.interestedIn.split('-')[2]}}</td>
+                         </tr>
+                     </table>
+                 </div>
+                </div>
+        {% endif %}
+                <!-- KOMENTARITEEEEEEE !!! -->
+                <div class="col-md-12 col-lg-12" style="margin-top: 10px;">
+                      <h3>Вкупно коментари: {{comments|count}}</h3>
+                      <div class="panel-group">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a data-toggle="collapse" href="#collapse1">Листај коментари</a>
+                            </h4>
+                          </div>
+                          <div id="collapse1" class="panel-collapse collapse">
+                            <ul class="list-group">
+                                {% for com in comments %}
+                                    <li class="list-group-item"><a href="/listing/preview/{{com.condo_id}}" target="_blank">
+                                        {{com.body[:25]}}...</a><span class="badge">{{momentjs(com.commTimeStamp).fromNow()}}</span></li>
+                                {% endfor %}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                 </div>
+
+
+
+
+
+
+    </div>
+
+
+
+     </div>  <!-- end of class=ROW -->
+
+
+    <script type="application/javascript" src="../../static/js/myscr.js">
+
+    </script>
+
+{% endblock %}

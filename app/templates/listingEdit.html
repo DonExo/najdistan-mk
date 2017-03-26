@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+{% block content %}
+
+    <div class="page-header">
+     <h2 align="center">Корекција на оглас</h2>
+    </div>
+
+    <div class="row" style="margin-bottom: 50px">
+        <div class="col-xs-12 col-md-6 col-sm-10 col-sm-offset-0 col-md-offset-2 col-lg-6 col-lg-offset-0">
+
+
+                 {% call macros.render_form(form, action_url=url_for('listingEditedSubmit'), enctype="multipart/form-data",
+                        action_text='Зачувај промени',  class_='form-horizontal') %}
+
+                    {{ macros.render_field_inline_withValue(form.title, placeholder='пр. Нов стан во Лисиче', value=ccid.title ) }}
+                    {{ macros.render_field_inline_withValue(form.description, value=ccid.description) }}
+                    {{ macros.render_field_inline_withValue(form.city, value=ccid.city) }}
+                    {{ macros.render_field_inline_withValue(form.areas, value=ccid.area) }}
+                    <input type="hidden" name="areas" id="areas" value="" >
+                    {{ macros.render_field_inline_withValue(form.address, placeholder='ул. Московска бр. 13', value=ccid.address) }}
+                    {{ macros.render_field_inline_withValue(form.quadrature,value=ccid.quadrature) }}
+                    {{ macros.render_field_inline_withValue(form.rooms, value=ccid.rooms) }}
+                    {{ macros.render_field_inline_withValue(form.floor, value=ccid.floor) }}
+                    {% if ccid.types %}
+                        {{ macros.render_field_inline_withValue(form.condoType, value=1) }}
+                    {% else %}
+                        {{ macros.render_field_inline_withValue(form.condoType, value=0) }}
+                    {% endif %}
+                    {{ macros.render_field_inline_price(form.price, value=ccid.price) }}
+                    {{ macros.render_field_inline(form.file) }}
+                    <input type="hidden" value="{{ccid.condoId}}" name="hiddenCondoId">
+                    <br><br><br><p><h4><i><b>Напомена:</b><br>Со кликање на „Зачувај промени“, Вашиот оглас автоматски добува статус на <u>невалидиран</u> се додека Администраторот не го одобри.</i></h4></p>
+            <br><br>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2 col-lg-5 col-lg-offset-0" style="border: 1px solid black; min-height: 300px; margin-bottom: 30px;">
+            {% if cpics %}
+                <div class="row">
+                {% for pic in cpics %}
+                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                         <label class=" help-block text-center">Слика {{pic.imgId}}</label>
+                        <a class="thumbnail" href="{{pic.path[3:]}}" data-lightbox="my-set"  style="display: inline-flex; height: 200px;  " >
+                            <img class="img-thumbnail" src="{{pic.path[3:]}}" width="200px" height="200px" />
+                        </a>
+                        </div>
+
+                {% endfor %}
+                </div>
+                <div class="row" style="margin-bottom: 30px;">
+                    <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+                       <span class="label label-danger">Сакам да ги избришам сликите:</span>
+                        {% for pic in cpics %}
+                            <div class="checkbox">
+                              <label><input type="checkbox" name="imgId{{imgId}}" value="{{pic.imgId}}">Слика {{pic.imgId}}</label>
+                            </div>
+                        {% endfor %}
+                      </select>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% endcall %}
+    </div>
+
+ <!-- JS funkcija za 'pametno' selektiranje na tocnata vrednost od SELECT poleto -->
+<script type="application/javascript">
+    $(document).ready(function(){
+
+        city = $('#city').attr('value'); $('#city option[value='+city+']').prop('selected', true);
+        area = $('#area').attr('value'); $('#area option[value='+area+']').prop('selected', true);
+        quad = $('#quadrature').attr('value'); $('#quadrature option[value='+quad+']').prop('selected', true);
+        rooms = $('#rooms').attr('value'); $('#rooms option[value='+rooms+']').prop('selected', true);
+        floor = $('#floor').attr('value'); $('#floor option[value='+floor+']').prop('selected', true);
+        desc = $('#description').attr('value'); $('#description').val(desc);
+        condoType = $('#condoType').attr('value'); $('#condoType option[value='+condoType+']').prop('selected', true);
+
+         if($('#city').val() != 'Скопје'){
+                $('#areas').parent().parent().hide('slow')
+            }
+            else{
+                $('#areas').parent().parent().show('slow')
+            }
+
+            $('#city').on('change', function() {
+              if(this.value != 'Скопје'){
+                  $('#areas').parent().parent().hide('slow')
+                  $('#areas').val('Центар')
+              }else{
+                  $('#areas').parent().parent().show('slow')
+                  $('#areas').val('Центар')
+              }
+            });
+
+
+        $('#condoType').on('change', function() {
+        if ( $('#condoType').val() == 0){
+           $('#price').prop('placeholder', 'Пр: 250000')
+        }else{
+         $('#price').prop('placeholder', 'Пр: 200')}
+        });
+
+    });
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+
+{% block content %}
+
+  <div class="page-header">
+     <h2 align="center">Форма за Најава</h2>
+  </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-3 col-sm-4 col-sm-offset-4 col-md-offset-4 col-lg-4 col-lg-offset-4" style="border: 1px solid gray; border-radius:10px; padding:20px">
+
+            {% call macros.render_form(form, action_url='', action_text='Најави се',  class_='login-form') %}
+                {{ macros.render_field(form.email, placeholder='пр. john@doe.com', type='email') }}
+                {{ macros.render_field(form.password, placeholder='пр. МојаЛозинка123', type='password') }}
+                {{ macros.render_checkbox_field(form.remember_me) }}
+            {% endcall %}
+            <br><br><br>
+                <p class="text-right"><a href="/passRecovery"><i>Заборавена лозинка?</i></a></p>
+
+        </div>
+    </div>
+
+{% endblock content %}

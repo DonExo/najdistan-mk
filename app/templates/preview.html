@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+{% block content %}
+
+
+    <div class="row">
+        {% if ccid.isApproved %}
+            <div class="page-header" style='border: 1px solid black; margin: 0px 20px; background: #C3FDB8;'>
+            <div  style="position: absolute; bottom: 0; right: 120px; top: 80px; z-index:99; cursor: pointer;">
+                <img src="../../static/img/icons/condo-approved.png" width="100px" height="100px" data-toggle="tooltip" title="Огласот е верифициран од Администрацијата!">
+            </div>
+        {% else %}
+            <div class="page-header" style='border: 1px solid black; margin: 0px 20px; background: #ffcccc;'>
+            <div  style="position: absolute; bottom: 0; right: 130px; top: 90px; z-index:99; cursor: pointer;">
+                <img src="../../static/img/icons/condo-declined.png" width="100px" height="100px" data-toggle="tooltip" title="Огласот е во фаза на верифицирање!">
+            </div>
+        {% endif %}
+            <h3 align="center"><b>{{ccid.title}}</b>
+                {% if g.user == ccid.condoOwner %}
+             ( <a href="/listing/edit/{{ccid.condoId}}" ><span class="glyphicon glyphicon-pencil"></span>&nbsp;Измени</a> )
+             {% endif %}
+            </h3>
+            <span class="help-block text-center"><i>Објавено од:</i> <b><a href="{{url_for('user', userid=ccid.user_id)}}">{{ccid.condoOwner.fullName}}</a></b> &nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;<u>{{momentjs(ccid.timestamp).fromNow()}}</u></span>
+            <h5 align="center">Овој стан е прегледан <span class="label label-warning">{{ccid.timesVisited-1}}</span>  пати.</h5>
+        </div>
+
+        <!-- GLAVNIO DIV -->
+        <div class="col-md-8 col-lg-8" style="border: 1px solid gray; border-radius: 10px; margin: 10px 20px;" >
+
+            <!-- Galerijata -->
+            <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <h3 text-align="center">Галерија</h3>
+                {% if cpics %}
+                    {% for cp in cpics %}
+                    <div class="col-md-3 col-lg-3 col-sm-6 col-xs-6">
+                    <a class="thumbnail" href="{{cp.path[3:]}}" data-lightbox="my-set"  style="display: inline-flex; height: 150px;  " >
+                        <img class="img-thumbnail" src="{{cp.path[3:]}}" width="150px" height="150px" />
+                    </a>
+                    </div>
+                    {{break}}
+                    {% endfor %}
+                {% else %}
+                    <p align="center"><h4><i>Корисникот нема прикачено слики...</i></h4></p>
+                {% endif %}
+            </div>
+            </div>
+
+            <!-- VTORIO DIV, so opis informacii i slicno -->
+            <div class="col-md-12 col-lg-12 " >
+
+                <!-- Opis i telefon -->
+                <div class="col-md-7 col-lg-7" >
+                      <div class="col-md-12 col-lg-12" style=" margin-top: 20px; min-height: 200px; white-space: pre-line; border:1px solid gray; border-radius: 10px;">
+                            <h2><span class="label label-default">Опис</span></h2><br>
+                            {{ccid.description|safe}}
+                      </div>
+                      <div class="col-md-12 col-lg-12" style="margin: 10px 0px" >
+                           <h3><span class="glyphicon glyphicon-earphone"></span>&nbsp;Контакт тел:&nbsp;&nbsp;&nbsp;{{ccid.condoOwner.telNumber}}</h3>
+                      </div>
+
+                </div>
+
+                <!-- Detalite -->
+                <div class="col-md-5 col-lg-5 " >
+                       <div class="col-md-12 col-lg-12" style=" margin-top: 20px; min-height: 200px; border:1px solid gray; border-radius: 10px;">
+                            <h2><span class="label label-default">Детали</span></h2><br>
+
+                            <div class="form-group">
+                                <div class="col-sm-6">Град:</div>
+                                <div class="col-sm-6"><label class="control-label" >{{ccid.city}}</label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">Населба:</div>
+                                <div class="col-sm-6"><label class="control-label" >{{ccid.area}}</label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">Адреса:</div>
+                                <div class="col-sm-6"><label class="control-label" >{{ccid.address}}</label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">Квадратура:</div>
+                                <div class="col-sm-6"><label class="control-label" >{{ccid.quadrature}}</label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">Број на соби:</div>
+                                <div class="col-sm-6"><label class="control-label" >{{ccid.rooms}}</label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">Кат:</div>
+                                <div class="col-sm-6"><label class="control-label" >{{ccid.floor}}</label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">Тип:</div>
+                                <div class="col-sm-6"><label class="control-label" >
+                                    {% if ccid.types %}Изнајмува
+                                    {% else %}Продава
+                                    {% endif %}
+                                </label></div>
+                            </div>
+                           <div class="form-group">
+                                <div class="col-sm-6">Цена:</div>
+                                <div class="col-sm-6"><label class="control-label" ><u>{{ccid.price}}</u><b> €</b></label></div>
+                            </div>
+                           <div class="form-group">
+                                <div class="col-sm-6">Статус :</div>
+                                <div class="col-sm-6"><label class="control-label" >
+                                    {% if ccid.available %} <span class="label label-success">Слободен</span>
+                                    {% else %} <span class="label label-danger">Зафатен</span>
+                                    {% endif %}
+                                </label></div>
+                            </div>
+
+                       </div>
+
+                </div>
+
+                <!-- da komentiras -->
+                <div class="col-md-12 col-lg-12 " style="margin: 20px 0px" >
+                         {% if g.user.is_authenticated %}
+                            <form action="/comSub" method="post" >
+                                {{coms.hidden_tag()}}
+                                {{ macros.render_field(coms.body) }}
+                                {{ macros.render_field(coms.submit, label_visible=False) }}
+                                <h6 class="text-right" style="margin-bottom: 50px;"><i>(Сопственикот на огласот ќе биде известен преку е-маил за Вашиот коментар)</i></h6>
+                                <input type="hidden" name="condoId" value="{{ccid.condoId}}">
+                            </form>
+                         {% else %}
+                             <p class="text-center">Сакате да оставите коментар за тековниот стан?<br>
+                                 <span class="label label-warning text-center"><a href="/login?next=%2Flisting%2Fpreview%2F{{ccid.condoId}}">Најавате</a> се или <a href="/register"> регистрирајте</a> се</span></p>
+                         {% endif %}
+                    </div>
+
+                <!-- Komentarite -->
+                <div class="col-md-12 col-lg-12" >
+                    {% if comments.items %}
+                        {% for com in comments.items %}
+                            {% include 'comment.html' %}
+                        {% endfor %}
+                     <ul class="pager">
+                        {% if comments.has_prev %}<li class="previous"><a href="{{ url_for('listingPreview', cid=ccid.condoId, comPage=comments.prev_num) }}"><span class="glyphicon glyphicon-menu-left"></span> Понови коментари</a></li>
+                             {% else %}<li class="previous disabled"><a href="#"><span class="glyphicon glyphicon-menu-left"></span>Понови коментари</a></li>{% endif %}
+                        {% if comments.has_next %}<li class="next"><a href="{{ url_for('listingPreview', cid=ccid.condoId, comPage=comments.next_num) }}">Постари коментари <span class="glyphicon glyphicon-menu-right"></span></a></li>
+                             {% else %}<li class="next disabled"><a href="#">Постари коментари <span class="glyphicon glyphicon-menu-right"></span></a></li>{% endif %}
+                         </ul>
+                    {% endif %}
+                            <!-- ova e obicen Modal za report na komentar -->
+                    <div class="modal fade" id="myModal">
+                        <div class="modal-dialog modal-sm">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Пријавете коментар</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                    <div class="form-group">
+                                      <label for="repReason">Зошто го пријавувате?</label>
+                                      <textarea id='repReason' class="form-control" rows="4"  placeholder='Пр. Коментарот има вулгарна содржина...'></textarea>
+                                    </div>
+                                    <button id="reportCom" class="btn btn-danger btn-block" data-dismiss="modal" >Пријави</button>
+
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <!-- stanovi VO BLIZINA -->
+        <div class="col-md-3 col-lg-3" style="border:1px solid black; border-radius: 10px; margin: 10px 20px; background: #E0E0E0 ">
+            <h5 class="text-center"><u>Станови во близина:</u></h5>
+                {% if simCon %} <!-- ako uopste ima slicni stanovi - togas printaj gi -->
+                    {% for sim in simCon %}
+                        {% if ccid.condoId != sim.condoId %}
+                            <div class="col-md-12 col-lg-12" style=" min-height: 200px; border-bottom: 1px dashed black;  margin-top: 20px;">
+                                <h4><a href="{{url_for('listingPreview', cid=sim.condoId)}}"><abbr title="{{sim.description}}">{{sim.title}}</abbr></a></h4>
+                                <h5><b>Град:</b> {{sim.city}} || <b>Цена:</b> {{sim.price}} <span class="glyphicon glyphicon-eur"></span></h5>
+                                {% if sim.imgsPerCondo[0] %}
+                                <a class="thumbnail" href="{{sim.imgsPerCondo[0].path[3:]}}"  data-lightbox={{sim.condoId}} >
+                                <img class="img-thumbnail" src="{{sim.imgsPerCondo[0].path[3:]}}"  alt="Не постои слика..." style="max-height: 200px;"  /></a>
+                                {% else %}
+                                <a href="#" >
+                                <img class="img-thumbnail" src=""  alt="Не постои слика..." /></a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+     <script type="text/javascript" >
+
+            $('.comDelete').on('click', function(){
+
+                var data = {}
+                data['comId'] = ($(this).attr('comid'))
+                $('#'+data['comId']).hide(1000)
+
+            $.ajax({
+                type : "POST",
+                url : "{{ url_for('commentDelete') }}",
+                data: JSON.stringify(data, null, '\t'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+                }
+            });
+            });
+            var data = {};
+            $('.comReport').on('click', function(){
+                data['comId'] = ($(this).attr('comid'));
+                data['userId'] = ($(this).attr('userId'));
+                data['cid'] = ($(this).attr('cid'));
+                data['body'] = $(this).parent().parent().children('.panel-body').text();
+
+            });
+            $('#reportCom').on('click', function(){
+                    if($('#repReason').val() == ''){
+                        alert('Внесете причина зошто го пријавувате коментарот!');
+                    }else{
+                        data['reason'] = $('#repReason').val();
+                        $('#repReason').val('');
+                         $.ajax({
+                            type : "POST",
+                            url : "{{ url_for('reportComment') }}",
+                            data: JSON.stringify(data, null, '\t'),
+                            contentType: 'application/json;charset=UTF-8',
+                            success: function(result) {
+                            }
+                        });
+
+                    }
+
+                });
+     </script>
+
+</div>
+{% endblock %}
+

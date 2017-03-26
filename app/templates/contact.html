@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <div class="col-xs-12 col-md-5 col-sm-4 col-sm-offset-4 col-md-offset-3 col-lg-5 col-lg-offset-3" style="border: 1px solid gray; border-radius:10px; padding:20px">
+
+
+<form action="#"  id="frmContact" method="post">
+  <h2 align="center" >Контакт форма:</h2><br><br>
+  <div class="col-lg-2 col-md-2">Вашето Име</div>
+  <div class="col-lg-10 col-md-10"><input type="text" name="txtContactName" id="txtContantName" class="form-control" required="required" /></div>
+  <div style="clear:both; padding:2px"></div>
+  <div class="col-lg-2 col-md-2">Вашиот Е-Маил</div>
+  <div class="col-lg-10 col-md-10"><input type="text" name="txtContactEmail" id="txtContactEmail" class="form-control" required="required" /></div>
+  <div style="clear:both; padding:2px"></div>
+  <div class="col-lg-2 col-md-2">Предмет</div>
+  <div class="col-lg-10 col-md-10">
+    <select name="txtContactPredmet" id="txtContactPredmet" class="form-control" required="required">
+      <option value="">Одбери</option>
+      <option value="Технички прашања">Технички прашања</option>
+      <option value="За премиум членство">За премиум членство</option>
+      <option value="Несериозни лажни огласи">Несериозни лажни огласи</option>
+      <option value="Злоупотреба на податоци">Злоупотреба на податоци</option>
+      <option value="Бришење на огласи">Бришење на огласи</option>
+      <option value="Маркетинг">Маркетинг</option>
+      <option value="Останато">Останато</option>
+    </select>
+
+  </div>
+  <div style="clear:both; padding:2px"></div>
+  <div class="col-lg-2 col-md-2">Вашиот Телефон</div>
+  <div class="col-lg-10 col-md-10"><input type="text" name="txtContactTel" id="txtContactTel" class="form-control tdrightVal" required="required" /></div>
+  <div style="clear:both; padding:2px"></div>
+  <div class="col-lg-2 col-md-2">Текст на пораката</div>
+  <div class="col-lg-10 col-md-10"><textarea name="txtContactPoraka" id="txtContactPoraka" rows="6" class="form-control tdrightVal" style="max-width:400px;" required="required"></textarea></div>
+  <div style="clear:both; padding:5px"></div>
+  <div class="col-lg-2 col-md-2"></div>
+  <div class="col-lg-10 col-md-10">
+    <label id="lblMsgSendMail"></label>
+  </div>
+  <div style="clear:both; padding:5px"></div>
+  <div class="col-lg-2 col-md-2"></div>
+  <div class="col-lg-10 col-md-10"><a class="btn btn-primary" id="btnSend">Испрати <span class="glyphicon glyphicon-ok"></span></a></div>
+  <div style="clear:both; padding:5px"></div>
+</form>
+</div>
+{% endblock %}

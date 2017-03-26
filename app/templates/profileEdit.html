@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+
+{% block content %}
+
+     <div class="page-header">
+     <h2 align="center">Промена на кориснички поставки</h2>
+    </div>
+
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-xs-12 col-md-6 col-sm-6 col-sm-offset-3 col-md-offset-3 col-lg-6 col-lg-offset-3" style="border: 1px solid gray; border-radius:10px; padding:20px">
+
+            {% call macros.render_form(form, action_url=url_for('profileEdit'), action_text='Зачувај промени',  class_='form-horizontal') %}
+
+            {{ macros.render_field_inline_withValue(form.fullName, placeholder='Аце Ацев', value=user.fullName) }}
+            {{ macros.render_field_inline_withValue(form.telNumber, placeholder='078 / 123 - 456', value=user.telNumber) }}
+            {{ macros.render_field_inline_withValue(form.email, placeholder='ace@acev.com', value=user.email) }}
+            <br><br>
+            {{ macros.render_field_inline(form.password1, value='') }}
+            {{ macros.render_field_inline(form.repeatPassword1, value='') }}
+                <h6 class="text-right" style="margin-bottom: 50px;"><i>(Овие две полиња оставете ги празни доколку не сакате да ја промените лозинката)</i></h6>
+            <br><br><br>
+            {{ macros.render_field_inline(form.currentPassword1, value='') }}
+                <h6 class="text-right" style="margin-bottom: 50px;"><i>(Се внесува при секоја промена на податоците)</i></h6>
+            {% endcall %}
+            <br><br>
+        </div>
+    </div>
+{% endblock %}

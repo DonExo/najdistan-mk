@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="page-header">
+     <h2 align="center">Администрациски панел</h2>
+  </div>
+
+        <div class="row">
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="#home">ДОМА</a></li>
+            <li><a data-toggle="pill" href="#users">Корисници</a></li>
+            <li><a data-toggle="pill" href="#condos">Нови огласи</a></li>
+            <li><a data-toggle="pill" href="#condosNot">Одбиени огласи</a></li>
+            <li><a data-toggle="pill" href="#comments">Пријавени коментари</a></li>
+            <li><a data-toggle="pill" href="#messages">Пораки</a></li>
+        </ul>
+
+         <div class="tab-content" >
+
+            <div id="home" class="tab-pane fade in active">
+              <h3>Оддел наменет строго за администраторите на сајтот.</h3>
+              <br>
+              <br>
+              <h4>Доколку по грешка сте пристапиле до овој сектор - Ве молиме веднаш пријавете преку формата за <a href="/contact">Контакт</a></h4>
+            </div>
+
+
+            <div id="users" class="tab-pane fade">
+              <table class="table table-striped table-bordered ">
+                     <thead>
+                        <tr class="info">
+                          <th>#</th>
+                          <th>Име и презиме</th>
+                          <th>Е-маил адреса</th>
+                          <th>Статус</th>
+                          <th>Акција</th>
+                        </tr>
+                      </thead>
+
+                      <tbody id="tableUsers">
+                       {% for user in users %}
+                           <tr>
+                               <td>{{user.userId}}</td>
+                               <td><a href="{{url_for('user', userid=user.userId) }}" target="_blank">{{user.fullName}}</a></td>
+                               <td>{{user.email}}</td>
+                               <td>Активен</td>
+                               <td>
+                                   <a href="#" class="sendEmail" email="{{user.email}}" title="Прати е-маил" data-toggle="modal" data-target="#modalSendEmail"><img src="../static/img/icons/envelope.png" width="20px" height="20px" /></a>&nbsp;&nbsp;
+                                   <a href="#" data-toggle="tooltip" title="Блокирај корисник"><img src="../static/img/icons/block.png" width="20px" height="20px" /></a>&nbsp;&nbsp;
+                               </td>
+                           </tr>
+                       {% else %}
+                            <h2>nema korisnici</h2>
+                       {% endfor %}
+                      </tbody>
+              </table>
+            </div>
+
+
+            <div id="condos" class="tab-pane fade">
+                <table class="table table-bordered table-striped table-condensed">
+                     <thead>
+                        <tr class="info">
+                          <th>#</th>
+                          <th>Наслов</th>
+                          <th>Опис</th>
+                          <th>Град</th>
+                          <th>Населба</th>
+                          <th>Цена</th>
+                          <th>Timestamp</th>
+                          <th>Тип</th>
+                          <th>Owner</th>
+                          <th>Слики</th>
+                          <th>Акција</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                       {% for condo in condos %}
+                       {% if condo.actedOn == 0 %}
+                           <tr>
+                               <td><a href="{{url_for('listingPreview', cid=condo.condoId)}}" target="_blank"><b>&nbsp; #{{condo.condoId}} &nbsp;</b></a></td>
+                               <td><h5 data-toggle="tooltip" title="{{condo.title}}">{{condo.title[:20]}} ...</h5></td>
+                               <td><h5 data-toggle="tooltip" title="{{condo.description}}">{{condo.description[:30]}} ...</h5></td>
+                               <td>{{condo.city}}</td>
+                               <td>{{condo.area}}</td>
+                               <td>{{condo.price}}<b> €</b></td>
+                               <td>{{momentjs(condo.timestamp).fromNow()}}</td>
+                               {% if condo.types %}
+                                <td>Издава</td>
+                               {% else %}
+                                <td>Продава</td>
+                               {% endif %}
+                               <td>{{condo.condoOwner.fullName}}</td>
+                               <td>
+                                   <a class="thumbnail" href="{{condo.imgsPerCondo[0].path[3:]}}" data-lightbox="{{condo.condoId}}"  style="height: 33px; width: 33px; " >
+                                           <img class="img-thumbnail" src="{{condo.imgsPerCondo[0].path[3:]}}" width="150px" height="150px" />
+                                   </a>
+                               </td>
+                               <td>
+                                   <a class="acceptCondo" cid="{{condo.condoId}}" href="#" data-toggle="tooltip" title="Прифати оглас"><img src="../static/img/icons/approve.png" width="20px" height="20px" /></a>&nbsp;&nbsp;
+                                   <a class="denyCondo" cid="{{condo.condoId}}" href="#" data-toggle="tooltip" title="Одбиј оглас"><img src="../static/img/icons/decline.png" width="20px" height="20px" /></a>
+                               </td>
+                               {% for cp in condo.imgsPerCondo[1:] %}
+                               <a class="thumbnail" href="{{cp.path[3:]}}" data-lightbox="{{condo.condoId}}"  style="height: 40px; width: 40px; display: none; " ></a>
+                               {% endfor %}
+
+                           </tr>
+                       {% endif %}
+                       {% else %}
+                            <h2>nema novi stanovi</h2>
+                       {% endfor %}
+                      </tbody>
+              </table>
+            </div>
+
+
+             <div id="condosNot" class="tab-pane fade">
+              <table class="table table-bordered table-striped table-condensed">
+                     <thead>
+                        <tr class="info">
+                          <th>#</th>
+                          <th>Наслов</th>
+                          <th>Опис</th>
+                          <th>Град</th>
+                          <th>Населба</th>
+                          <th>Цена</th>
+                          <th>Timestamp</th>
+                          <th>Тип</th>
+                          <th>Owner</th>
+                          <th>Слики</th>
+                          <th>Акција</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                       {% for condo in condos %}
+                       {% if condo.actedOn %}
+                           <tr>
+                               <td><a href="{{url_for('listingPreview', cid=condo.condoId)}}" target="_blank"><b>&nbsp; #{{condo.condoId}} &nbsp;</b></a></td>
+                               <td><h5 data-toggle="tooltip" title="{{condo.title}}">{{condo.title[:20]}} ...</h5></td>
+                               <td><h5 data-toggle="tooltip" title="{{condo.description}}">{{condo.description[:30]}} ...</h5></td>
+                               <td>{{condo.city}}</td>
+                               <td>{{condo.area}}</td>
+                               <td>{{condo.price}}<b> €</b></td>
+                               <td>{{momentjs(condo.timestamp).fromNow()}}</td>
+                               {% if condo.types %}
+                                <td>Издава</td>
+                               {% else %}
+                                <td>Продава</td>
+                               {% endif %}
+                               <td>{{condo.condoOwner.fullName}}</td>
+                               <td>
+                                   <a class="thumbnail" href="{{condo.imgsPerCondo[0].path[3:]}}" data-lightbox="{{condo.condoId}}"  style="height: 33px; width: 33px; " >
+                                           <img class="img-thumbnail" src="{{condo.imgsPerCondo[0].path[3:]}}" width="150px" height="150px" />
+                                   </a>
+                               </td>
+                               <td>
+                                   <a class="acceptCondo" cid="{{condo.condoId}}" href="#" data-toggle="tooltip" title="Прифати оглас"><img src="../static/img/icons/approve.png" width="20px" height="20px" /></a>&nbsp;&nbsp;
+                                   <a class="permanDelCondo" cid="{{condo.condoId}}" href="#" data-toggle="tooltip" title="Трајно избриши оглас"><img src="../static/img/icons/decline.png" width="20px" height="20px" /></a>&nbsp;&nbsp;
+                               </td>
+                               {% for cp in condo.imgsPerCondo[1:] %}
+                               <a class="thumbnail" href="{{cp.path[3:]}}" data-lightbox="{{condo.condoId}}"  style="height: 40px; width: 40px; display: none; " ></a>
+                               {% endfor %}
+
+                           </tr>
+                       {% endif %}
+                       {% endfor %}
+                      </tbody>
+              </table>
+            </div>
+
+
+            <div id="comments" class="tab-pane fade">
+             <table class="table table-striped table-bordered ">
+                     <thead>
+                        <tr class="info">
+                          <th>Оглас #</th>
+                          <th>Корисник</th>
+                          <th>Содржина</th>
+                          <th>Причина</th>
+                          <th>Timestamp</th>
+                          <th>Акција</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                       {% for report in reports %}
+                           <tr>
+                               <td><a href="{{url_for('listingPreview', cid=report.condo_id, _anchor=report.comment_id)}}" target="_blank"><b>Оглас #{{report.condo_id}}</b></a></td>
+                               <td><a href="{{url_for('user', userid=report.userReported.userId) }}" target="_blank">{{report.userReported.fullName}}</a></td>
+                               <td style="max-width: 40%"><pre>{{report.body}}</pre></td>
+                               <td style="max-width: 40%"><pre>{{report.reason}}</pre></td>
+                               <td>{{momentjs(report.timestamp).fromNow()}}</td>
+                               <td>
+                                   <a href="#" data-toggle="tooltip" title="Блокирај корисник"><img src="../static/img/icons/block.png" width="20px" height="20px" /></a>&nbsp;&nbsp;
+                                   <a class="deleteReport" repID="{{report.reportId}}" href="#" data-toggle="tooltip" title="Избриши пријава (Означи 'средено')"><img src="../static/img/icons/decline.png" width="20px" height="20px"/></a>
+                               </td>
+                           </tr>
+                       {% else %}
+                            <h2>Yoooopi, нема пријавени коментари / корисници :)</h2>
+                       {% endfor %}
+                      </tbody>
+              </table>
+            </div>
+
+            <div id="messages" class="tab-pane fade">
+             <table class="table table-striped table-bordered ">
+                     <thead>
+                        <tr class="info">
+                          <th>Порака #</th>
+                          <th>Корисник</th>
+                          <th>Е-маил адреса</th>
+                          <th>Предмет</th>
+                          <th>Тел. број</th>
+                          <th>Содржина</th>
+                          <th>Timestamp</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                       <p>Немате добиено нови пораки...</p>
+                      </tbody>
+              </table>
+            </div>
+
+        </div>
+
+
+
+                    <div class="modal fade" id="modalSendEmail" role="dialog">
+                        <div class="modal-dialog modal-sm">
+
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">Испрати Е-маил</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                    <div class="form-group">
+                                      <label for="toEmailAddress">До е-маил адреса: </label> <input id="toEmailAddress" class="form-control" type="text" disabled />   <br>
+                                      <label for="emailSubject">Предмет</label><input type="text" id="emailSubject" class="form-control" placeholder='Пр. Суспендирање поради...' />
+                                      <label for="emailBody">Содржина</label><textarea id='emailBody' class="form-control" rows="6"  placeholder='Пр. Здраво корисник, Вашиот оглас беше одбиен поради...'></textarea>
+                                    </div>
+                                    <button id="sendEmail" class="btn btn-success btn-block" data-dismiss="modal" >Испрати</button>
+
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+
+</div>
+
+<script type="text/javascript" >
+
+             $('.deleteReport').on('click', function(){
+                var data = {}
+                data['repId'] = ($(this).attr('repid'))
+                $(this).parent().parent().hide(500)
+
+            $.ajax({
+                type : "POST",
+                url : "{{ url_for('reportDelete') }}",
+                data: JSON.stringify(data, null, '\t'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+                }
+            });
+            });
+
+
+            $('.acceptCondo').on('click', function(){
+                var data = {}
+                data['cid'] = ($(this).attr('cid'))
+                $(this).parent().parent().hide(500)
+
+            $.ajax({
+                type : "POST",
+                url : "{{ url_for('acceptCondo') }}",
+                data: JSON.stringify(data, null, '\t'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+                }
+            });
+            });
+
+
+             $('.denyCondo').on('click', function(){
+                var data = {}
+                data['cid'] = ($(this).attr('cid'))
+                $(this).parent().parent().hide(500)
+            $.ajax({
+                type : "POST",
+                url : "{{ url_for('denyCondo') }}",
+                data: JSON.stringify(data, null, '\t'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+                }
+            });
+            });
+
+
+            $('.permanDelCondo').on('click', function(){
+                var data = {};
+                data['cid'] = ($(this).attr('cid'));
+                $(this).parent().parent().hide(500);
+            $.ajax({
+                type : "POST",
+                url : "{{url_for('permaDelete')}}",
+                data : JSON.stringify(data, null, '\t'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+
+                }
+            });
+            });
+
+             $('.sendEmail').on('click', function(){
+                 $('#toEmailAddress').val($(this).attr('email'));
+             });
+             $('#sendEmail').on('click', function(){
+                var data = {};
+                data['email'] = $('#toEmailAddress').val();
+                data['body'] = $('#emailBody').val();
+                data['subject'] = $('#emailSubject').val();
+                $('#emailBody').val('');
+                $('#emailSubject').val('');
+             $.ajax({
+                type : "POST",
+                url : "{{url_for('adminSendEmail')}}",
+                data : JSON.stringify(data, null, '\t'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function(result) {
+                }
+            });
+
+            });
+
+</script>
+
+{% endblock content %}

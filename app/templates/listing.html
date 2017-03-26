@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+{% block content %}
+
+    <div class="page-header">
+     <h2 align="center">Креирање нов оглас</h2>
+  </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-sm-10 col-sm-offset-0 col-md-offset-2 col-lg-6 col-lg-offset-2">
+
+                 {% call macros.render_form(form, action_url=url_for('listingNew'),enctype="multipart/form-data",  action_text='Огласи нов стан',  class_='form-horizontal') %}
+                    {{ macros.render_field_inline(form.title, placeholder='пр. Нов стан во Лисиче') }}
+                    {{ macros.render_field_inline(form.description, placeholder='пр. Станот се наоѓа на самата раскрсцина со бензинската...') }}
+                    {{ macros.render_field_inline(form.city) }}
+                    {{ macros.render_field_inline(form.areas) }}
+                    {{ macros.render_field_inline(form.address, placeholder='ул. Московска бр. 13') }}
+                    {{ macros.render_field_inline(form.quadrature) }}
+                    {{ macros.render_field_inline(form.rooms) }}
+                    {{ macros.render_field_inline(form.floor) }}
+                    {{ macros.render_field_inline(form.condoType) }}
+                    {{ macros.render_field_inline_price(form.price, placeholder='Пр: 256000 ') }}
+                    {{ macros.render_field_inline(form.file) }}
+                {% endcall %}
+            <br><br><br><br><br>
+        </div>
+    </div>
+
+
+    <script type="application/javascript">
+         $(document).ready(function(){
+             $('#city').on('change', function() {
+              if(this.value != 'Скопје'){
+                  $('#areas').parent().parent().hide('slow')
+                  $('#areas').val('Центар')
+              }else{
+                  $('#areas').parent().parent().show('slow')
+                  $('#areas').val('Центар')
+              }
+            });
+
+
+
+        $('#condoType').on('change', function() {
+        if ( $('#condoType').val() == 0){
+           $('#price').prop('placeholder', 'Пр: 250000')
+        }else{
+         $('#price').prop('placeholder', 'Пр: 200')}
+        });
+     });
+    </script>
+{% endblock %}
+

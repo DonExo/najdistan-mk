@@ -1,0 +1,34 @@
+
+
+
+
+<div class="col-md-11 col-lg-11 listingIndex" style="border: 1px solid black;  margin: 10px; border-radius: 3px;">
+    <!--
+    <div class="addFav" style="position: absolute; bottom: 0; right: 15px; top: 15px; z-index:99; cursor: pointer;">
+        <img src="../static/img/icons/heart.png" width="25px" height="25px" data-toggle="tooltip" title="Додади во омилени">
+    </div>
+    -->
+
+    {% if condo.imgsPerCondo[0] %}
+    <div class="col-md-4 col-lg-4" style="margin-top:5px">
+        <a class="thumbnail" href="{{condo.imgsPerCondo[0].path[3:]}}"  data-lightbox="{{condo.condoId}}" style="max-height:180px;"   >
+            <img class="img-thumbnail" src="{{condo.imgsPerCondo[0].path[3:]}}" alt="Не постои слика..." style="max-height:170px;" /></a>
+    </div>
+    {% else %}
+    <div class="col-md-4 col-lg-4" style="margin-top:5px">
+        <a class="thumbnail" href=""  data-lightbox="3"  >
+            <img class="img-thumbnail" src="/static/img/icons/noimg.png" alt="Не постои слика..." style="max-height: 200px;" /></a>
+    </div>
+    {% endif %}
+
+    <div  class="col-md-7 col-lg-7 " style="border: 0px solid #efefef; height: 190px;">
+        <div clas="row" style="border: 0px solid #efefef; height: 20%; margin-top: 25px; ">
+            <a href="{{url_for('listingPreview',cid=condo.condoId)}}"> <b>{{condo.title}}</b></a> <span class="badge" style="float: right">{{condo.price}}<span class="glyphicon glyphicon-eur"></span> </span>
+        </div>
+        <div clas="row" style=" height: 80%; margin-top: 20px;">
+            <p><i><b>Опис:</b></i></p>
+            <p data-toggle="tooltip" title="{{condo.description}}" style='cursor: pointer;'>{{condo.description[:100]}} <b>( ... )</b></p>
+        </div>
+    </div>
+
+</div>
