@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from jinja2 import Markup
 
 class momentjs(object):

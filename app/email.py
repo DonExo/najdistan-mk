@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from flask import render_template
 from flask_mail import Message
 from threading import Thread

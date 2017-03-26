@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding: utf-8
+
 from flask_wtf import Form
 from wtforms import BooleanField,StringField, SelectField
 from wtforms.fields.simple import PasswordField, TextAreaField, FileField, SubmitField
