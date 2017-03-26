@@ -1,5 +1,5 @@
 #!/usr/local/bin/python
-# coding: utf-8
+# -*- coding: utf8 -*-
 
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess12#'
