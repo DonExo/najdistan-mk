@@ -51,5 +51,5 @@ MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 MAIL_USERNAME = 'najdistan.mk@gmail.com'
-MAIL_PASSWORD = 'asdasdasd22'
+MAIL_PASSWORD = '********'
 ADMIN = 'НајдиСтан.мк'
