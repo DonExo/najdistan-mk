@@ -1,1 +1,1 @@
-*.rb linguist-language=Python
+app/static/* linguist-vendored
