@@ -256,7 +256,7 @@ def contact():
 @app.route('/index', methods=['GET', 'POST'])
 def index():
 
-    """
+    
     indCondos = Condo.query.all()
     indexCondos = random.sample(indCondos, 15)
 
@@ -275,8 +275,8 @@ def index():
                            mostVisited=mostVisitedCondo,
                            randomCondo=randomCondo,
                            indexCondos=indexCondos
-                           ) """
-    return render_template("simple.html")
+                           ) 
+    #return render_template("simple.html")
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
