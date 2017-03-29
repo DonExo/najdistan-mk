@@ -85,10 +85,10 @@
 
         <div class="input-group">
         <div class="col-sm-5 col-md-5 col-lg-5">
-              {{ field(class_='form-control', value=value, id='od', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
+              Од: {{ field(class_='form-control', value=value, id='od', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
         </div>
         <div class="col-sm-5 col-md-5 col-lg-5" id="doo">
-             {{ field(class_='form-control', value=value, id='doo', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
+             До:{{ field(class_='form-control', value=value, id='doo', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
         </div>
         {% if field.errors %}
             {% for e in field.errors %}
