@@ -272,7 +272,6 @@ def index():
                            randomCondo=randomCondo,
                            indexCondos=indexCondos
                            ) 
-    #return render_template("simple.html")
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
