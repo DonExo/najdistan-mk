@@ -1,6 +1,5 @@
 #!/usr/local/bin/python
 # coding: utf-8
-
 from flask import render_template, flash, redirect, url_for, request, g, session
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, lm
@@ -13,7 +12,6 @@ from sqlalchemy import or_
 from sqlalchemy.sql.expression import func
 from passlib.hash import sha256_crypt
 from functools import wraps
-
 
 
 ####################     Required func     ###################
@@ -245,8 +243,6 @@ def terms():
 def contact():
     return render_template('contact.html', title='Контактирајте не')
 ############################################################
-
-
 
 
 ####################    M A I N   FUNCS     ###################

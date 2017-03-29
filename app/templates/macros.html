@@ -1,4 +1,4 @@
-{% macro render_field(field, label_visible=true) -%}
+﻿{% macro render_field(field, label_visible=true) -%}
     <div class="form-group {% if field.errors %}has-error{% endif %} {{ kwargs.pop('class_', '') }}">
         {% if (field.type != 'HiddenField' and field.type !='CSRFTokenField') and label_visible %}
             <label for="{{ field.id }}" class="control-label">{{ field.label }}</label>
@@ -85,10 +85,10 @@
 
         <div class="input-group">
         <div class="col-sm-5 col-md-5 col-lg-5">
-              Од: {{ field(class_='form-control', value=value, id='od', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
+              {{ field(class_='form-control', value=value, id='od', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
         </div>
         <div class="col-sm-5 col-md-5 col-lg-5" id="doo">
-             До:{{ field(class_='form-control', value=value, id='doo', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
+             {{ field(class_='form-control', value=value, id='doo', **kwargs) }}<span class="glyphicon glyphicon-eur"></span>
         </div>
         {% if field.errors %}
             {% for e in field.errors %}
