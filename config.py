@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # -*- coding: utf8 -*-
+import os
 
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'you-will-never-guess12#'
@@ -50,6 +51,6 @@ MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
-MAIL_USERNAME = 'najdistan.mk@gmail.com'
-MAIL_PASSWORD = 'asdasdasd22'
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 ADMIN = 'НајдиСтан.мк'
