@@ -3,7 +3,7 @@
 import os
 
 WTF_CSRF_ENABLED = True
-SECRET_KEY = 'you-will-never-guess12#'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 CITIES = [
     ('Скопје', 'Скопје'), ('Битола', 'Битола'), ('Прилеп', 'Прилеп'), ('Велес', 'Велес'), ('Тетово', 'Тетово'),
@@ -51,6 +51,6 @@ MAIL_SERVER = 'smtp.googlemail.com'
 MAIL_PORT = 465
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
-MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+MAIL_USERNAME = os.environ['MAIL_USERNAME']
+MAIL_PASSWORD = os.environ['MAIL_PASSWORD']
 ADMIN = 'НајдиСтан.мк'
