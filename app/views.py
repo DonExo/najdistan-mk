@@ -114,7 +114,7 @@ def no_access_error(error):
 
 @app.errorhandler(500)
 def db_error(error):
-    #db.session.rollback()
+    db.session.rollback()
     return render_template('errors/500.html'), 500
 ########################################################################
 
