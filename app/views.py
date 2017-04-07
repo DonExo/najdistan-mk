@@ -726,3 +726,11 @@ def passRecovery():
         return render_template('recoverPass.html', form=form, title='Заборавена лозинка', text=text)
 
     return render_template('recoverPass.html', form=form, title='Заборавена лозинка')
+
+
+########################################################################################
+####### API Development #################
+
+@app.route('/api')
+def api():
+	return render_template("api.html")

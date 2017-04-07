@@ -1,4 +1,4 @@
 flask/*
 __pycache__/*
 *.pyc
-app.db
+*.db
