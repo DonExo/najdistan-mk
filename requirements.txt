@@ -14,5 +14,5 @@ passlib==1.7.1
 pyparsing==2.2.0
 six==1.10.0
 SQLAlchemy==1.1.8
-Werkzeug==0.12.1
+Werkzeug==0.15.3
 WTForms==2.1
